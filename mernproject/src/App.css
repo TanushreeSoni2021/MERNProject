@@ -1,0 +1,43 @@
+*{
+  padding-left: 0%;
+  margin: 0%;
+  box-sizing: border-box;
+}
+body, html{
+  height: 100%;
+  width: 100%;
+}
+/* nav bar */
+.nav-ul{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  background-color: rgb(190, 136, 93);
+  font-size: 120%;
+  font-weight: 500;
+
+}
+.nav-ul .nav-link{
+  padding: 1%;
+  color: #000;
+}
+.nav-link:hover{
+  color: #000 !important;
+}
+/* footer */
+.footer{
+  position: absolute;
+  bottom: 0%;
+  text-align: center;
+  width: 100%;
+  font-size: 120%;
+  padding: 1%;
+  background-color: rgba(71, 71, 17, 0.33);
+}
+/* signup */
+.forms{
+  padding: 0% 40%;
+}
+.form-control{
+  padding: 1% !important;
+}
