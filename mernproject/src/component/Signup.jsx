@@ -6,9 +6,18 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const collectData =() =>{
-    console.log(name, email , password);
-  }
+  const collectData = async () => {
+    console.log(name, email, password);
+    let result = await fetch("http://localhost:5000/register", {
+      method: "post",
+      body: JSON.stringify({ name, email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    result = await result.json();
+    console.log(result);
+  };
 
   return (
     <>
@@ -41,7 +50,9 @@ const Signup = () => {
               placeholder="Password"
             />
             <br />
-            <button className="btn btn-primary" onClick={collectData}>Sign up</button>
+            <button className="btn btn-primary" onClick={collectData}>
+              Sign up
+            </button>
           </div>
         </div>
       </div>
