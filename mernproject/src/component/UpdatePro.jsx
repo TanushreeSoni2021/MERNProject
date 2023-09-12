@@ -14,7 +14,7 @@ const UpdatePro = () => {
   }, []);
 
   const getSingalPro = async () => {
-    console.log(params);
+    console.warn(params);
     let result = await fetch(`http://localhost:5000/product/${params.id}`);
     result = await result.json();
     setName(result.name);
@@ -24,17 +24,18 @@ const UpdatePro = () => {
   };
 
   const handelUpdateProduct = async () => {
-    console.log(name, price, category, company);
+    console.warn(name, price, category, company);
     let result = await fetch(`http://localhost:5000/product/${params.id}`, {
       method: "Put",
       body: JSON.stringify({ name, price, category, company }),
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "Application/json",
       },
     });
-    result = await result.json;
-    console.log(result);
-    navigate("/");
+    result = await result.json();
+    if (result) {
+      navigate("/");
+    }
   };
 
   return (

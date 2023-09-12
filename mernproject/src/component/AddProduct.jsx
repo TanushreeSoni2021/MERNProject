@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [name, setName] = useState("");
@@ -7,6 +8,9 @@ const AddProduct = () => {
   const [company, setCompany] = useState("");
   const [error, setError] = useState(false);
 
+  const inputRef = useRef(null);
+  const [image, setImage] = useState('')
+  const navigate = useNavigate();
   const handelAddProduct = async () => {
     console.log(!name);
     if (!name || !price || !category || !company) {
@@ -20,12 +24,26 @@ const AddProduct = () => {
       method: "post",
       body: JSON.stringify({ name, price, category, company, userId }),
       headers: {
-        "Content-type": "application/json",
-      },
+        "Content-type": "application/json"
+      }
     });
-    result = await result.JSON;
-    console.log(result);
+    result = await result.json();
+    console.warn(result)
+    if (result) {
+      navigate('/')
+    }
   };
+
+  const handelImageClick = () => {
+    inputRef.current.click();
+  }
+
+  const handelImageChange = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    setImage(event.target.files[0])
+  }
+
   return (
     <>
       <div className="container">
@@ -85,6 +103,31 @@ const AddProduct = () => {
             {error && !company && (
               <span className="input-valid">Enter valid field</span>
             )}
+
+            <br />  {/* upload image */}
+            <div onClick={handelImageClick} className="form-control"
+            >
+              {image ? (
+                <>
+                  <img className="img-display-after " src={URL.createObjectURL(image)} alt="img" />
+                  <span className="m-3 text-success fw-bold">Image uploaded</span>
+                  <br />
+                  <span>if want to change the click again</span>
+                </>
+              ) : (
+                <>
+                  <img className="img-display-before" src="uploadingImg.png" alt="img" />
+                  <span className="m-3">Upload the image of your product</span>
+                </>
+              )}
+              <input
+                type="file"
+                ref={inputRef}
+                // value={company}
+                onChange={handelImageChange}
+                style={{ display: "none" }}
+              />
+            </div>
 
             <br />
             <button className="btn btn-primary mt-3" onClick={handelAddProduct}>

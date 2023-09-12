@@ -3,13 +3,14 @@ require("./db/config");
 const cors = require("cors");
 const User = require("./db/user");
 const Product = require("./db/product");
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
 //user register api
-app.post("/register", async (req, resp) => {
+app.post("/register",  async (req, resp) => {
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject();
@@ -18,29 +19,29 @@ app.post("/register", async (req, resp) => {
 });
 
 //login api
-app.post("/login", async (req, resp) => {
+app.post("/login",  async (req, resp) => {
   console.log(req.body);
   if (req.body.email && req.body.password) {
     let user = await User.findOne(req.body).select("-password");
-    if (user) {
-      resp.send(user);
-    } else {
-      resp.send({ result: "not found" });
-    }
-  } else {
-    resp.send({ result: "not found" });
+   if(user){
+    resp.send(user)
+   }else{
+    resp.send({result : "not found"})
+   }
+  }else{
+    resp.send({result :"not found ..."})
   }
 });
 
 //Add products api
-app.post("/add", async (req, resp) => {
+app.post("/add",  async (req, resp) => {
   let product = new Product(req.body);
   let result = await product.save();
   resp.send(result);
 });
 
 // list product api
-app.get("/prolist", async (req, resp) => {
+app.get("/prolist",  async (req, resp) => {
   let products = await Product.find();
   if (products.length > 0) {
     resp.send(products);
@@ -51,7 +52,7 @@ app.get("/prolist", async (req, resp) => {
 
 // delete product api
 app.delete("/product/:id", async (req, resp) => {
-  const result = await Product.deledteOne({ _id: req.params.id });
+  const result = await Product.deleteOne({ _id: req.params.id });
   resp.send(result);
 });
 
@@ -86,5 +87,6 @@ app.get("/search/:key", async (req, resp) => {
   });
   resp.send(result);
 });
+
 
 app.listen(5000);
