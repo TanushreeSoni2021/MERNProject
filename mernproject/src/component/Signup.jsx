@@ -9,7 +9,7 @@ const Signup = () => {
 
   useEffect(() => {
     const auth = localStorage.getItem("user");
-   if(auth){
+    if (auth) {
       navigate("/");
     }
   });
@@ -25,11 +25,11 @@ const Signup = () => {
     });
     result = await result.json();
     console.warn(result);
-    if(result){
-    
+    if (result) {
+
       navigate("/");
     }
-    else{
+    else {
       alert("enter your details")
     }
   };
