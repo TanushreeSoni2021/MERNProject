@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 //user register api
-app.post("/register",  async (req, resp) => {
+app.post("/register", async (req, resp) => {
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject();
@@ -19,29 +19,29 @@ app.post("/register",  async (req, resp) => {
 });
 
 //login api
-app.post("/login",  async (req, resp) => {
+app.post("/login", async (req, resp) => {
   console.log(req.body);
   if (req.body.email && req.body.password) {
     let user = await User.findOne(req.body).select("-password");
-   if(user){
-    resp.send(user)
-   }else{
-    resp.send({result : "not found"})
-   }
-  }else{
-    resp.send({result :"not found ..."})
+    if (user) {
+      resp.send(user)
+    } else {
+      resp.send({ result: "not found" })
+    }
+  } else {
+    resp.send({ result: "not found ..." })
   }
 });
 
 //Add products api
-app.post("/add",  async (req, resp) => {
+app.post("/add", async (req, resp) => {
   let product = new Product(req.body);
   let result = await product.save();
   resp.send(result);
 });
 
 // list product api
-app.get("/prolist",  async (req, resp) => {
+app.get("/prolist", async (req, resp) => {
   let products = await Product.find();
   if (products.length > 0) {
     resp.send(products);
@@ -79,14 +79,33 @@ app.put("/product/:id", async (req, resp) => {
 
 //search api
 app.get("/search/:key", async (req, resp) => {
-  let result = await Product.findOne({
-    $or: [
-      { name: { $regex: req.params.key } },
-      { company: { $regex: req.params.key } },
-    ],
-  });
-  resp.send(result);
+  try {
+    const key = req.params.key;  //first change
+    const results = await Product.find({
+      $or: [
+        { name: { $regex: key, $options: "i" } }, // second change $options: "i" for case-insensitive search
+        { company: { $regex: key, $options: "i" } },
+        { category: { $regex: key, $options: "i" } },
+      ],
+    });
+
+    resp.send(results);
+  } catch (error) {
+    console.error("Error searching for products:", error);
+    resp.status(500).send("Internal Server Error");
+  }
 });
+
+// app.get("/search/:key", async (req, resp) => {
+//   let result = await Product.findOne({
+//     $or: [
+//       { name: { $regex: req.params.key } },
+//       { company: { $regex: req.params.key } },
+//       { category: { $regex: req.params.key } },
+//     ],
+//   });
+//   resp.send(result);
+// });
 
 
 app.listen(5000);

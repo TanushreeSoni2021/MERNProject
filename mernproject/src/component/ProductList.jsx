@@ -2,19 +2,37 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProductList = () => {
+  const [loading, setLoading] = useState(true);
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     getProducts();
   }, []);
+
+
   const getProducts = async () => {
-    let result = await fetch("http://localhost:5000/prolist", {
-      headers: {
-        authorization: JSON.parse(localStorage.getItem("token")),
-      },
-    });
-    result = await result.json();
-    setProducts(result);
+    setLoading(true);
+
+    try {
+      let result = await fetch("http://localhost:5000/prolist", {
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": `Bearer ${API_KEY}`, // Include your API key here
+        },
+      });
+
+      if (!result.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      result = await result.json();
+      setProducts(result);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setLoading(false);
+    }
   };
 
   const deleteProduct = async (id) => {
@@ -31,15 +49,34 @@ const ProductList = () => {
   const handleSearch = async (event) => {
     let key = event.target.value;
     if (key) {
-      let result = await fetch(`http://localhost:5000/search/${key}`);
-      result = await result.json();
-      if (result) {
-        setProducts(result);
+      try {
+        let result = await fetch(`http://localhost:5000/search/${key}`);
+        if (!result.ok) {
+          throw new Error('Network response was not ok');
+        }
+        result = await result.json();
+        if (result) {
+          setProducts(result);
+        }
+      } catch (error) {
+        console.error('Error searching for products:', error);
       }
     } else {
       getProducts();
     }
   };
+  // const handleSearch = async (event) => {
+  //   let key = event.target.value;
+  //   if (key) {
+  //     let result = await fetch(`http://localhost:5000/search/${key}`);
+  //     result = await result.json();
+  //     if (result) {
+  //       setProducts(result);
+  //     }
+  //   } else {
+  //     getProducts();
+  //   }
+  // };
 
   return (
     <>
@@ -62,7 +99,9 @@ const ProductList = () => {
               <li>Operation</li>
             </ul>
 
-            {products.length > 0 ? (
+            {loading ? ( // Display loading indicator if loading is true
+              <h1>Loading...</h1>
+            ) : products.length > 0 ? (
               products.map((item, index) => {
                 return (
                   <ul key={item._id}>

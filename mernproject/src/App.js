@@ -10,6 +10,7 @@ import NavBar from "./component/NavBar";
 import AddProduct from "./component/AddProduct";
 import ProductList from "./component/ProductList";
 import UpdatePro from "./component/UpdatePro";
+import Profile from "./component/Profile";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
             <Route path="/add" element={<AddProduct />} />
             <Route path="/update/:id" element={<UpdatePro />} />
             <Route path="/logout" element={<h1>Logout </h1>} />
-            <Route path="/profile" element={<h1>Profile </h1>} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
 
           <Route path="/signup" element={<Signup />} />

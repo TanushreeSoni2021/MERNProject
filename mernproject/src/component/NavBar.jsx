@@ -4,9 +4,21 @@ import { Link, useNavigate } from "react-router-dom";
 export default function NavBar() {
   const auth = localStorage.getItem("user");
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    navigate("/signup");
+
+  const logout = (e) => {
+    e.preventDefault();
+    if (window.confirm("Are you sure to logout")) {
+      var ok = "You clicked OK!";
+
+    } else {
+      // var cancel = alert("You clicked Cancel!");
+      alert("You clicked Cancel!");
+    }
+    if (ok) {
+      localStorage.clear();
+      navigate("/signup");
+    }
+
   };
 
   const [isNavExpanded, setIsNavExpanded] = useState(false);
@@ -43,11 +55,11 @@ export default function NavBar() {
                     Add Product
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link className="nav-link" to="/update">
                     Update Product
                   </Link>
-                </li>
+                </li> */}
 
                 <li>
                   <Link className="nav-link" to="/profile">
