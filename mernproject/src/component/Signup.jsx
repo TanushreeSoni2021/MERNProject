@@ -12,7 +12,7 @@ const Signup = () => {
     if (auth) {
       navigate("/");
     }
-  },[]);
+  }, []);
 
   const collectData = async () => {
     console.warn(name, email, password);
@@ -25,8 +25,8 @@ const Signup = () => {
     });
     result = await result.json();
     console.warn(result);
-   localStorage.setItem("user",JSON.stringify(result));
-    if(result) {
+    localStorage.setItem("user", JSON.stringify(result));
+    if (result) {
       console.log(result);
       navigate("/");
     }

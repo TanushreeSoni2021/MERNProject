@@ -37,10 +37,14 @@ const UpdatePro = () => {
       navigate("/");
     }
   };
+  // const uptodate =() =>{
+  //   const userId = JSON.parse(localStorage.getItem("user"))._id;
 
+  // }
   return (
     <div className="container">
-      <h1>Update Products</h1>
+     <div className="update-product mt-5">
+     <h1>Update Products</h1>
       <div className="row">
         <div className="form">
           <input
@@ -95,6 +99,7 @@ const UpdatePro = () => {
           </button>
         </div>
       </div>
+     </div>
     </div>
   );
 };

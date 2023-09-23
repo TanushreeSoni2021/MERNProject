@@ -32,6 +32,7 @@ const Login = () => {
   return (
     <>
       <div className="container">
+      <div className="log mt-5">
         <div className="row">
           <h1>Login</h1>
           <div className="form">
@@ -56,7 +57,8 @@ const Login = () => {
               Sign up
             </button>
             {/* </form> */}
-          </div>
+            </div>
+            </div>
         </div>
       </div>
     </>

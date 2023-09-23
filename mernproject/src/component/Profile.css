@@ -1,73 +1,57 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: #000;
+}
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f2f2f2;
+  width: 100%;
+  height: 100%;
+}
+.bg-custom {
+  background-color: #f4f4f4;
+}
+.outer {
+  margin: 3.5rem 0 0 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 5%;
+  border: none;
+  border-radius: 15px;
+}
+.outer .bg-img > img {
+  display: block;
+  width: 100%;
+  height: 30vh;
+  border: none;
+  border-radius: 15px 15px 0px 0px;
+}
+.outer .profile-pic {
+  font-family: "Times New Roman", Times, serif;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
+.outer .profile-pic > img {
+  margin-top: -7%;
+  border: solid 5px white;
+  width: 8rem;
+  border-radius: 100px;
 }
-
-header h1 {
-    margin: 0;
-    font-size: 36px;
+/* this is needed to make the content scrollable on larger screens */
+@media (min-width: 576px) {
+  .h-sm-100 {
+    height: 100%;
+  }
 }
-
-header p {
-    margin: 5px 0;
-    font-size: 18px;
+@media (max-width: 576px) {
+  .outer .bg-img {
+    display: none;
+  }
+  .outer .profile-pic {
+    margin-top: 3%;
+  }
 }
-
-.profile {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px;
-    display: flex;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.profile img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-right: 20px;
-}
-
-.profile .info {
-    flex: 1;
-}
-
-.contact {
-    background-color: #fff;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.contact h2 {
-    margin: 0;
-    font-size: 24px;
-}
-
-.contact ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.contact li {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
+@media (min-width: 250px) {
+  .h-sm-100 {
+    height: 100%;
+  }
 }

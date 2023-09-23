@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
@@ -7,10 +7,13 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [company, setCompany] = useState("");
   const [error, setError] = useState(false);
+  const [file, setFile] = useState(null);
 
-  const inputRef = useRef(null);
-  const [image, setImage] = useState('')
   const navigate = useNavigate();
+
+
+
+
   const handelAddProduct = async () => {
     console.log(!name);
     if (!name || !price || !category || !company) {
@@ -18,14 +21,22 @@ const AddProduct = () => {
       return false;
     }
 
+
     console.log(name, price, category, company);
     const userId = JSON.parse(localStorage.getItem("user"))._id;
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price);
+    formData.append('category', category);
+    formData.append('company', company);
+    formData.append('userId', userId);
+    formData.append('image', file);
+
     let result = await fetch("http://localhost:5000/add", {
       method: "post",
-      body: JSON.stringify({ name, price, category, company, userId }),
-      headers: {
-        "Content-type": "application/json"
-      }
+      body: formData,
+
     });
     result = await result.json();
     console.warn(result)
@@ -34,16 +45,39 @@ const AddProduct = () => {
     }
   };
 
-  const handelImageClick = () => {
-    inputRef.current.click();
-  }
 
-  const handelImageChange = (event) => {
-    const file = event.target.files[0];
-    console.log(file);
-    setImage(event.target.files[0])
-  }
 
+
+
+
+  // const handleUpload = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('image', file);
+
+  //     await axios.post('http://localhost:5000/add', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+
+  //     alert('Image uploaded successfully');
+  //   } catch (error) {
+  //     console.log(file);
+  //     alert('Error uploading image');
+  //   }
+  // };
+
+
+
+
+
+
+
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
   return (
     <>
       <div className="container">
@@ -104,32 +138,12 @@ const AddProduct = () => {
               <span className="input-valid">Enter valid field</span>
             )}
 
-            <br />  {/* upload image */}
-            <div onClick={handelImageClick} className="form-control"
-            >
-              {image ? (
-                <>
-                  <img className="img-display-after " src={URL.createObjectURL(image)} alt="img" />
-                  <span className="m-3 text-success fw-bold">Image uploaded</span>
-                  <br />
-                  <span>if want to change the click again</span>
-                </>
-              ) : (
-                <>
-                  <img className="img-display-before" src="uploadingImg.png" alt="img" />
-                  <span className="m-3">Upload the image of your product</span>
-                </>
-              )}
-              <input
-                type="file"
-                ref={inputRef}
-                // value={company}
-                onChange={handelImageChange}
-                style={{ display: "none" }}
-              />
-            </div>
-
             <br />
+            <input className='form-control' type="file" onChange={handleFileChange} />
+            {/* <button onClick={handleUpload}>Upload</button> */}
+
+
+
             <button className="btn btn-primary mt-3" onClick={handelAddProduct}>
               Add product
             </button>
