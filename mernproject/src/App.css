@@ -179,88 +179,27 @@ html {
   margin: 0 auto;
   padding: 20px;
 }
-
-.product-listing {
-  background-color: #f4f4f4;
-  padding: 20px;
-  border-radius: 10px;
-}
-
 h2 {
   text-align: center;
 }
 
-.product-listing .product-list {
-  margin-top: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
+.product-list .card>img{
+  width: 150px; /* Aap image container ki width and height ko apne requirements ke hisab se set karein */
+  height: 200px;
+  overflow: hidden; 
 }
-
+.product-list .card button {
+  margin:  0 2% 0 2%;
+}
+.product-list .card h5{
+ font-size: 1.1rem;
+ overflow-y: hidden;
+}
 .search-box {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.product-listing ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: space-between;
-  /* background-color: #f0f0f0; */
-  /* border-bottom: 1px solid #ccc; */
-  font-weight: bold;
-}
-
-.product-listing ul li {
-  flex: 1;
-  text-align: center;
-  padding: 10px 0;
-}
-
-.product-listing ul li:first-child {
-  flex: 0.5;
-}
-
-.product-listing ul li:last-child {
-  flex: 2;
-}
-
-.product-listing ul li button a {
-  text-decoration: none;
-  color: white;
-}
-
-.loading {
-  text-align: center;
-  margin-top: 20px;
-  font-size: x-large;
-}
-
-.product-listing .no-product {
-  text-align: center;
-  margin-top: 20px;
-}
-
-@media (max-width: 768px) {
-  .product-listing ul {
-    flex-direction: column;
-  }
-
-  .product-listing ul li {
-    text-align: left;
-    padding: 10px;
-  }
-
-  .product-listing ul li:first-child {
-    flex: 1;
-  }
-
-  .product-listing ul li:last-child {
-    flex: 1;
-  }
 }
 
 /* search input */

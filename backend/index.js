@@ -3,53 +3,27 @@ require("./db/config");
 const cors = require("cors");
 const User = require("./db/user");
 const Product = require("./db/product");
+const path = require("path");
+
 // const Image = require("./db/image");
-const multer = require('multer');
+const multer = require("multer");
 
 const app = express();
-
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(cors());
-
 
 // Set up Multer for handling file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Define the directory where uploaded images will be stored
+    cb(null, "uploads/"); // Define the directory where uploaded images will be stored
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const fileName = Date.now() + path.extname(file.originalname);
+    cb(null, fileName);
   },
 });
-
 const upload = multer({ storage });
-
-//Add products api
-app.post("/add", upload.single('image'), async (req, resp) => {
-  const { name, price, category, userId, company } = req.body;
-
-  try {
-    const { filename } = req.file; // Assuming 'filename' is the field name for the uploaded image
-
-    // Create a new Product instance with image data
-    const product = new Product({ name, price, category, userId, company,  filename });
-
-    // Save the product with image data
-    const result = await product.save();
-
-    // Send a success response
-    resp.status(200).json({ message: 'Product added successfully', product: result });
-  } catch (error) {
-    resp.status(500).json({ error: 'Error adding product' });
-  }
-});
-
-// app.post("/add", async (req, resp) => {
-//   let product = new Product(req.body);
-//   let result = await product.save();
-//   resp.send(result);
-// });
-
 
 //user register api
 app.post("/register", async (req, resp) => {
@@ -66,15 +40,37 @@ app.post("/login", async (req, resp) => {
   if (req.body.email && req.body.password) {
     let user = await User.findOne(req.body).select("-password");
     if (user) {
-      resp.send(user)
+      resp.send(user);
     } else {
-      resp.send({ result: "not found" })
+      resp.send({ result: "not found" });
     }
   } else {
-    resp.send({ result: "not found ..." })
+    resp.send({ result: "not found ..." });
   }
 });
 
+// add products
+app.post("/add", upload.single("filename"), async (req, resp) => {
+  const { name, price, category, userId, company } = req.body;
+
+  try {
+    const product = new Product({
+      name,
+      price,
+      category,
+      userId,
+      company,
+      filename: req.file.originalname,
+      filepath: req.file.path,
+    });
+    const result = await product.save();
+    resp
+      .status(200)
+      .json({ message: "Product added successfully", product: result });
+  } catch (error) {
+    resp.status(500).json({ error: "Error adding product" });
+  }
+});
 
 // list product api
 app.get("/prolist", async (req, resp) => {
@@ -116,7 +112,7 @@ app.put("/product/:id", async (req, resp) => {
 //search api
 app.get("/search/:key", async (req, resp) => {
   try {
-    const key = req.params.key;  //first change
+    const key = req.params.key; //first change
     const results = await Product.find({
       $or: [
         { name: { $regex: key, $options: "i" } }, // second change $options: "i" for case-insensitive search
@@ -131,17 +127,5 @@ app.get("/search/:key", async (req, resp) => {
     resp.status(500).send("Internal Server Error");
   }
 });
-
-// app.get("/search/:key", async (req, resp) => {
-//   let result = await Product.findOne({
-//     $or: [
-//       { name: { $regex: req.params.key } },
-//       { company: { $regex: req.params.key } },
-//       { category: { $regex: req.params.key } },
-//     ],
-//   });
-//   resp.send(result);
-// });
-
 
 app.listen(5000);

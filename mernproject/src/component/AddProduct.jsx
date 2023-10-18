@@ -11,18 +11,12 @@ const AddProduct = () => {
 
   const navigate = useNavigate();
 
-
-
-
   const handelAddProduct = async () => {
-    console.log(!name);
-    if (!name || !price || !category || !company) {
+    if (!name || !price || !category || !company || !file) {
       setError(true);
-      return false;
+      return;
     }
 
-
-    console.log(name, price, category, company);
     const userId = JSON.parse(localStorage.getItem("user"))._id;
 
     const formData = new FormData();
@@ -31,49 +25,25 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('company', company);
     formData.append('userId', userId);
-    formData.append('image', file);
+    formData.append('filename', file);
 
-    let result = await fetch("http://localhost:5000/add", {
-      method: "post",
-      body: formData,
+    try {
+      const response = await fetch("http://localhost:5000/add", {
+        method: "POST",
+        body: formData,
+      });
 
-    });
-    result = await result.json();
-    console.warn(result)
-    if (result) {
-      navigate('/')
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        navigate('/');
+      } else {
+        setError(true);
+      }
+    } catch (error) {
+      setError(true);
     }
   };
-
-
-
-
-
-
-  // const handleUpload = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('image', file);
-
-  //     await axios.post('http://localhost:5000/add', formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-
-  //     alert('Image uploaded successfully');
-  //   } catch (error) {
-  //     console.log(file);
-  //     alert('Error uploading image');
-  //   }
-  // };
-
-
-
-
-
-
-
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -81,6 +51,7 @@ const AddProduct = () => {
   return (
     <>
       <div className="container">
+      <div className="addPro mt-5">
         <h1>Add Products</h1>
         <div className="row">
           <div className="form">
@@ -140,15 +111,18 @@ const AddProduct = () => {
 
             <br />
             <input className='form-control' type="file" onChange={handleFileChange} />
-            {/* <button onClick={handleUpload}>Upload</button> */}
-
-
+            {file && (
+              <div>
+                <img className="img-display-after " src={URL.createObjectURL(file)} alt="img" />
+              </div>
+            )}
 
             <button className="btn btn-primary mt-3" onClick={handelAddProduct}>
               Add product
             </button>
           </div>
         </div>
+      </div>
       </div>
     </>
   );
